@@ -1,24 +1,26 @@
 #include "notepad.h"
 #include "ui_notepad.h"
+#include <iostream>
 
 Notepad::Notepad(QWidget *parent)  // constructor
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::Notepad)
 {
     ui->setupUi(this);
     this->setCentralWidget(ui->textEdit);
+    this->setWindowTitle(windowTitle);
 
-    connect(ui->actionNew, &QAction::triggered, this, &Notepad::newDocument);
-    connect(ui->actionOpen, &QAction::triggered, this, &Notepad::open);
-    connect(ui->actionSave, &QAction::triggered, this, &Notepad::save);
-    connect(ui->actionSaveAs, &QAction::triggered, this, &Notepad::saveAs);
-    connect(ui->actionPrint, &QAction::triggered, this, &Notepad::print);
-    connect(ui->actionExit, &QAction::triggered, this, &Notepad::exit);
-    connect(ui->actionCopy, &QAction::triggered, this, &Notepad::copy);
-    connect(ui->actionCut, &QAction::triggered, this, &Notepad::cut);
-    connect(ui->actionPaste, &QAction::triggered, this, &Notepad::paste);
-    connect(ui->actionUndo, &QAction::triggered, this, &Notepad::undo);
-    connect(ui->actionRedo, &QAction::triggered, this, &Notepad::redo);
+    connect(ui->actionNew, &QAction::triggered, this, &Notepad::on_actionNew_triggered);
+    connect(ui->actionOpen, &QAction::triggered, this, &Notepad::on_actionOpen_triggered);
+    connect(ui->actionSave, &QAction::triggered, this, &Notepad::on_actionSave_triggered);
+    connect(ui->actionSaveAs, &QAction::triggered, this, &Notepad::on_actionSaveAs_triggered);
+    connect(ui->actionPrint, &QAction::triggered, this, &Notepad::on_actionPrint_triggered);
+    connect(ui->actionExit, &QAction::triggered, this, &Notepad::on_actionExit_triggered);
+    connect(ui->actionCopy, &QAction::triggered, this, &Notepad::on_actionCopy_triggered);
+    connect(ui->actionCut, &QAction::triggered, this, &Notepad::on_actionCut_triggered);
+    connect(ui->actionPaste, &QAction::triggered, this, &Notepad::on_actionPaste_triggered);
+    connect(ui->actionUndo, &QAction::triggered, this, &Notepad::on_actionUndo_triggered);
+    connect(ui->actionRedo, &QAction::triggered, this, &Notepad::on_actionRedo_triggered);
 //    connect(ui->actionFont, &QAction::triggered, this, &Notepad::selectFont);
 //    connect(ui->actionBold, &QAction::triggered, this, &Notepad::setFontBold);
 //    connect(ui->actionUnderline, &QAction::triggered, this, &Notepad::setFontUnderline);
@@ -39,29 +41,30 @@ Notepad::~Notepad() // destructor
 }
 
 
-void Notepad::newDocument()
+void Notepad::on_actionNew_triggered()
 {
-    //currentFile.clear();
+    currentFile.clear();
     ui->textEdit->setText(QString());
 }
 
 
-void Notepad::open()
+void Notepad::on_actionOpen_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Open the file");
     QFile file(fileName);
     currentFile = fileName;
-    if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, "Warning", "Cannot open file: " + file.errorString());
     }
-    setWindowTitle(fileName);
+    windowTitle = fileName;
+    setWindowTitle(windowTitle);
     QTextStream in(&file);
     QString text = in.readAll();
     ui->textEdit->setText(text);
     file.close();
 }
 
-void Notepad::save()
+void Notepad::on_actionSave_triggered()
 {
     QString fileName;
     if (currentFile.isEmpty()) {
@@ -71,33 +74,37 @@ void Notepad::save()
         fileName = currentFile;
     }
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, "Warning", "Cannot save file: " + file.errorString());
     }
-    setWindowTitle(fileName);
+    windowTitle = fileName;
+    setWindowTitle(windowTitle);
     QTextStream out(&file);
     QString text = ui->textEdit->toPlainText();
     out << text;
     file.close();
+
 }
 
-void Notepad::saveAs()
+void Notepad::on_actionSaveAs_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save as");
     QFile file(fileName);
 
-    if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+    std::cout << QFile::Text << std::endl;
+    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, "Warning", "Cannot save file: " + file.errorString());
     }
     currentFile = fileName;
-    setWindowTitle(fileName);
+    windowTitle = fileName;
+    setWindowTitle(windowTitle);
     QTextStream out(&file);
     QString text = ui->textEdit->toPlainText();
     out << text;
     file.close();
 }
 
-void Notepad::print()
+void Notepad::on_actionPrint_triggered()
 {
 #if defined(QT_PRINTSUPPORT_LIB) && QT_CONFIG(printer)
     QPrinter printDev;
@@ -110,38 +117,38 @@ void Notepad::print()
 #endif
 }
 
-void Notepad::exit()
+void Notepad::on_actionExit_triggered()
 {
     QCoreApplication::quit();
 }
 
-void Notepad::copy()
+void Notepad::on_actionCopy_triggered()
 {
 #if QT_CONFIG(clipboard)
     ui->textEdit->copy();
 #endif
 }
 
-void Notepad::cut()
+void Notepad::on_actionCut_triggered()
 {
 #if QT_CONFIG(clipboard)
     ui->textEdit->cut();
 #endif
 }
 
-void Notepad::paste()
+void Notepad::on_actionPaste_triggered()
 {
 #if QT_CONFIG(clipboard)
     ui->textEdit->paste();
 #endif
 }
 
-void Notepad::undo()
+void Notepad::on_actionUndo_triggered()
 {
     ui->textEdit->undo();
 }
 
-void Notepad::redo()
+void Notepad::on_actionRedo_triggered()
 {
     ui->textEdit->redo();
 }
@@ -153,10 +160,6 @@ void Notepad::redo()
 //    if (fontSelected)
 //        ui->textEdit->setFont(font);
 //}
-
-
-
-
 
 
 

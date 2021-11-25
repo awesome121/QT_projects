@@ -9,9 +9,10 @@
 #include <QPrintDialog>
 #include <QFont>
 #include <QFontDialog>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; } // declare Notepad class in Ui namespace, generated from .ui files by uic tool
+namespace Ui { class Notepad; } // declare Notepad class in Ui namespace, generated from .ui files by uic tool
 QT_END_NAMESPACE
 
 class Notepad : public QMainWindow
@@ -22,28 +23,29 @@ public:
     explicit Notepad(QWidget *parent = nullptr); // Notepad cannot be implicitly instantiated
     ~Notepad();
 
+
 private slots:  // used to prepare event handler
-    void newDocument();
+    void on_actionOpen_triggered();
 
-    void open();
+    void on_actionNew_triggered();
 
-    void save();
+    void on_actionSave_triggered();
 
-    void saveAs();
+    void on_actionSaveAs_triggered();
 
-    void print();
+    void on_actionPrint_triggered();
 
-    void copy();
+    void on_actionCopy_triggered();
 
-    void exit();
+    void on_actionExit_triggered();
 
-    void cut();
+    void on_actionCut_triggered();
 
-    void paste();
+    void on_actionPaste_triggered();
 
-    void redo();
+    void on_actionRedo_triggered();
 
-    void undo();
+    void on_actionUndo_triggered();
 
 //    void selectFont();
 
@@ -55,8 +57,12 @@ private slots:  // used to prepare event handler
 
 //    void about();
 
+public:
+    QString windowTitle = "New Document*";
+
 private:
-    Ui::MainWindow *ui;
+    Ui::Notepad *ui;
     QString currentFile;
+
 };
 
