@@ -47,7 +47,6 @@ private slots:  // used to prepare event handler
 
     void on_actionUndo_triggered();
 
-//    void selectFont();
 
 //    void setFontBold(bool bold);
 
@@ -57,8 +56,13 @@ private slots:  // used to prepare event handler
 
 //    void about();
 
+    void on_actionSelect_Font_triggered();
+
+    void on_textEdit_textChanged();
+
 public:
-    QString windowTitle = "New Document*";
+    QString windowTitle = "New Document";
+    bool isChanged = true;
 
 private:
     Ui::Notepad *ui;
