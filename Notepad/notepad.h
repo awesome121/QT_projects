@@ -10,6 +10,7 @@
 #include <QFont>
 #include <QFontDialog>
 #include <QString>
+#include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notepad; } // declare Notepad class in Ui namespace, generated from .ui files by uic tool
@@ -22,6 +23,7 @@ class Notepad : public QMainWindow
 public:
     explicit Notepad(QWidget *parent = nullptr); // Notepad cannot be implicitly instantiated
     ~Notepad();
+    void initSettings();
 
 
 private slots:  // used to prepare event handler
@@ -47,22 +49,39 @@ private slots:  // used to prepare event handler
 
     void on_actionUndo_triggered();
 
-
-//    void setFontBold(bool bold);
-
-//    void setFontUnderline(bool underline);
-
-//    void setFontItalic(bool italic);
-
-//    void about();
-
     void on_actionSelect_Font_triggered();
 
     void on_textEdit_textChanged();
 
+    void on_actionBold_triggered();
+
+    void on_actionItalic_triggered();
+
+    void on_actionUnderline_triggered();
+
+    void on_actionMaximise_triggered();
+
+    void on_actionMinimise_triggered();
+
+    void on_actionZoom_in_triggered();
+
+    void on_actionZoom_out_triggered();
+//--------
+    int showExitConfirmation();
+
+    int showExitConfirmationWithoutCancel();
+
+    void closeEvent(QCloseEvent* event);
+
 public:
     QString windowTitle = "New Document";
-    bool isChanged = true;
+    bool isNewFile = true;
+    bool isChanged = false;
+    bool isFontBold = false;
+    bool isFontItalic = false;
+    bool isFontUnderline = false;
+
+
 
 private:
     Ui::Notepad *ui;

@@ -40,28 +40,106 @@ Notepad::~Notepad() // destructor
     delete ui;
 }
 
+void Notepad::initSettings()
+{
+    isNewFile = true; // a new file is open, set to false once editing
+    isChanged = false; // is the text edited
+    isFontBold = false;
+    isFontItalic = false;
+    isFontUnderline = false;
+}
+
+/*
+ * Return 1 on saving, 2 on discard, 3 on cancel
+ */
+int Notepad::showExitConfirmation()
+{
+    QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::Save:
+        try {
+            on_actionSave_triggered();
+        } catch (int e) {
+            return 0;
+        }
+        return 1;
+    case QMessageBox::Discard:
+        return 2;
+    case QMessageBox::Cancel:
+        return 3;
+    default:
+        std::cout << "Exit confirmation case error" << std::endl;
+        return 0;
+    }
+}
+
+
+/*
+ * Return 1 on saving, 2 on discard
+ */
+int Notepad::showExitConfirmationWithoutCancel()
+{
+    QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+        case QMessageBox::Save:
+            try {
+                on_actionSave_triggered();
+            } catch (int e) {
+                return 0;
+            }
+            return 1;
+        case QMessageBox::Discard:
+            return 2;
+        default:
+            std::cout << "Exit confirmation case error" << std::endl;
+            return 0;
+    }
+}
 
 void Notepad::on_actionNew_triggered()
 {
-    currentFile.clear();
-    ui->textEdit->setText(QString());
-    windowTitle = "New Document*";
-    setWindowTitle(windowTitle);
+    int ret = 0;
+    if (isChanged) {
+       ret = showExitConfirmation();
+    }
+    if (ret == 0 || ret == 1 || ret == 2) {
+        initSettings();
+        currentFile.clear();
+        ui->textEdit->setText(QString());
+        windowTitle = "New Document";
+        setWindowTitle(windowTitle);
+    }
 }
 
 
 void Notepad::on_actionOpen_triggered()
 {
+
     QString fileName = QFileDialog::getOpenFileName(this, "Open the file");
     QFile file(fileName);
-    currentFile = fileName;
     if (file.open(QIODevice::ReadOnly | QFile::Text)) {
+        if (isChanged) {
+            showExitConfirmationWithoutCancel();
+        }
+        initSettings();
+        currentFile = fileName;
         windowTitle = fileName;
         setWindowTitle(windowTitle);
         QTextStream in(&file);
         QString text = in.readAll();
         ui->textEdit->setText(text);
     }
+
 
 }
 
@@ -82,6 +160,7 @@ void Notepad::on_actionSave_triggered()
         QString text = ui->textEdit->toPlainText();
         out << text;
         file.close();
+        isChanged = false;
     }
 
 
@@ -101,6 +180,7 @@ void Notepad::on_actionSaveAs_triggered()
         QString text = ui->textEdit->toPlainText();
         out << text;
         file.close();
+        isChanged = false;
     }
 }
 
@@ -119,7 +199,12 @@ void Notepad::on_actionPrint_triggered()
 
 void Notepad::on_actionExit_triggered()
 {
-    QCoreApplication::quit();
+    int ret = showExitConfirmation();
+    if (ret == 3) {
+        return ; // ignore
+    } else {
+        QCoreApplication::quit();
+    }
 }
 
 void Notepad::on_actionCopy_triggered()
@@ -163,5 +248,61 @@ void Notepad::on_actionSelect_Font_triggered()
 
 void Notepad::on_textEdit_textChanged()
 {
-    setWindowTitle(windowTitle + "*");
+    if (isNewFile) { // not editing
+        isNewFile = false;
+        isChanged = false;
+    } else { // editing
+        isChanged = true;
+        setWindowTitle(windowTitle + "*");
+    }
+}
+
+
+void Notepad::on_actionBold_triggered()
+{
+    ui->textEdit->setFontWeight(isFontBold ? QFont::Bold : QFont::Normal);
+    isFontBold = !isFontBold;
+
+}
+
+void Notepad::on_actionItalic_triggered()
+{
+    ui->textEdit->setFontItalic(!isFontItalic);
+    isFontItalic = !isFontItalic;
+}
+
+void Notepad::on_actionUnderline_triggered()
+{
+    ui->textEdit->setFontUnderline(!isFontUnderline);
+    isFontUnderline = !isFontUnderline;
+}
+
+
+void Notepad::on_actionMaximise_triggered()
+{
+    setWindowState(Qt::WindowMaximized);
+}
+
+void Notepad::on_actionMinimise_triggered()
+{
+    setWindowState(Qt::WindowMinimized);
+}
+
+void Notepad::on_actionZoom_in_triggered()
+{
+    ui->textEdit->zoomIn(1.5);
+}
+
+void Notepad::on_actionZoom_out_triggered()
+{
+    ui->textEdit->zoomOut(1.5);
+}
+
+void Notepad::closeEvent(QCloseEvent* event)
+{
+    int ret = 0;
+    ret = showExitConfirmation();
+    if (ret == 0 || ret == 3) {
+        event->ignore();
+    }
 }

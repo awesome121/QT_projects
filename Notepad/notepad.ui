@@ -24,17 +24,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="formLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>240</y>
-      <width>160</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="formLayout"/>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -66,13 +55,33 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="actionCut"/>
+    <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
-    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menufont">
+    <property name="title">
+     <string>Font</string>
+    </property>
     <addaction name="actionSelect_Font"/>
+    <addaction name="separator"/>
+    <addaction name="actionBold"/>
+    <addaction name="actionItalic"/>
+    <addaction name="actionUnderline"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionMaximise"/>
+    <addaction name="actionMinimise"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_out"/>
    </widget>
    <addaction name="menuNew"/>
    <addaction name="menuEdit"/>
+   <addaction name="menufont"/>
+   <addaction name="menuWindow"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
@@ -83,6 +92,9 @@
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="icon">
@@ -92,15 +104,32 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/save.png</normaloff>:/icons/icons/save.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSaveAs">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/saveAs.png</normaloff>:/icons/icons/saveAs.png</iconset>
+   </property>
    <property name="text">
     <string>Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionCopy">
@@ -111,6 +140,9 @@
    <property name="text">
     <string>Copy</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
   </action>
   <action name="actionCut">
    <property name="icon">
@@ -120,20 +152,44 @@
    <property name="text">
     <string>Cut</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
   <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/undo.png</normaloff>:/icons/icons/undo.png</iconset>
+   </property>
    <property name="text">
     <string>Undo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/redo.png</normaloff>:/icons/icons/redo.png</iconset>
+   </property>
    <property name="text">
     <string>Redo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
+   </property>
   </action>
   <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/print.png</normaloff>:/icons/icons/print.png</iconset>
+   </property>
    <property name="text">
     <string>Print...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionExit">
@@ -144,6 +200,9 @@
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="actionPaste">
    <property name="icon">
@@ -153,10 +212,101 @@
    <property name="text">
     <string>Paste</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
   </action>
   <action name="actionSelect_Font">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/font.png</normaloff>:/icons/icons/font.png</iconset>
+   </property>
    <property name="text">
     <string>Select Font</string>
+   </property>
+  </action>
+  <action name="actionBold">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/bold.png</normaloff>:/icons/icons/bold.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bold</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionUnderline">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/underline.png</normaloff>:/icons/icons/underline.png</iconset>
+   </property>
+   <property name="text">
+    <string>Underline</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionItalic">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/italic.png</normaloff>:/icons/icons/italic.png</iconset>
+   </property>
+   <property name="text">
+    <string>Italic</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionMinimise">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/minimise.png</normaloff>:/icons/icons/minimise.png</iconset>
+   </property>
+   <property name="text">
+    <string>Minimise</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionZoom_in">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/zoomIn.png</normaloff>:/icons/icons/zoomIn.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionZoom_out">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/zoomOut.png</normaloff>:/icons/icons/zoomOut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionMaximise">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/maximise.png</normaloff>:/icons/icons/maximise.png</iconset>
+   </property>
+   <property name="text">
+    <string>Maximise</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+M</string>
    </property>
   </action>
  </widget>

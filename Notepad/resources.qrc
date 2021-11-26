@@ -6,6 +6,19 @@
         <file>icons/cut.png</file>
         <file>icons/copy.png</file>
         <file>icons/close.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/saveAs.png</file>
+        <file>icons/save.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/print.png</file>
+        <file>icons/font.png</file>
+        <file>icons/bold.png</file>
+        <file>icons/italic.png</file>
+        <file>icons/maximise.png</file>
+        <file>icons/minimise.png</file>
+        <file>icons/zoomOut.png</file>
+        <file>icons/zoomIn.png</file>
+        <file>icons/underline.png</file>
     </qresource>
     <qresource prefix="/cut"/>
 </RCC>
